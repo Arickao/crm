@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.crm.workbench.dao.ClueActivityRelationDao">
+
+    <delete id="unbind">
+        delete from tbl_clue_activity_relation where id = #{id}
+    </delete>
+
+    <insert id="save">
+        INSERT INTO tbl_clue_activity_relation (id, clueId, activityId)
+        VALUES (#{id}, #{clueId}, #{activityId})
+    </insert>
+
+    <select id="getListByClueId" resultType="org.example.crm.workbench.domain.ClueActivityRelation">
+        SELECT id, clueId, activityId
+        FROM tbl_clue_activity_relation
+        WHERE clueId = #{clueId}
+    </select>
+	
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

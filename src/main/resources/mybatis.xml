@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--<settings>
+        &lt;!&ndash; 设置mybatis输出日志 &ndash;&gt;
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>-->
+
+    <!-- 设置别名 -->
+    <typeAliases>
+        <package name="org.example.crm.setting.domain"/>
+        <package name="org.example.crm.workbench.domain"/>
+    </typeAliases>
+
+
+    <!-- 分页插件 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+    </plugins>
+
+
+    <mappers>
+
+        <package name="org.example.crm.setting.dao"/>
+        <package name="org.example.crm.workbench.dao"/>
+    </mappers>
+</configuration>

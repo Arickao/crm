@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.crm.workbench.dao.ContactsDao">
+	
+    <select id="getContactsByCondition" resultType="org.example.crm.workbench.domain.Contacts">
+        SELECT id, owner, source, customerId, fullname
+        , appellation, email, mphone, job, birth
+        , createBy, createTime, editBy, editTime, description
+        , contactSummary, nextContactTime, address
+        FROM tbl_contacts
+
+        <where>
+            <if test="fullname != null and fullname != '' ">
+                fullname = #{fullname}
+            </if>
+
+            <if test="customerId != null and customerId != '' ">
+                and customerId = #{customerId}
+            </if>
+
+        </where>
+
+    </select>
+
+    <insert id="save">
+        INSERT INTO tbl_contacts (id, owner, source, customerId, fullname
+                                 , appellation, email, mphone, job, birth
+                                 , createBy, createTime, description, contactSummary, nextContactTime
+                                 , address)
+        VALUES (#{id}, #{owner}, #{source}, #{customerId}, #{fullname}
+               , #{appellation}, #{email}, #{mphone}, #{job}, #{birth}
+               , #{createBy}, #{createTime}, #{description}, #{contactSummary}, #{nextContactTime}
+               , #{address})
+    </insert>
+
+    <select id="getContactsLikeName" resultType="org.example.crm.workbench.domain.Contacts">
+        SELECT id, owner, source, customerId, fullname
+             , appellation, email, mphone, job, birth
+             , createBy, createTime, editBy, editTime, description
+             , contactSummary, nextContactTime, address
+        FROM tbl_contacts
+        WHERE fullname like '%' #{fullname} '%'
+    </select>
+
+    <select id="getContactsByMap" resultType="org.example.crm.workbench.domain.Contacts">
+        SELECT t1.id, t2.name AS owner, t1.source, t3.name AS customerId, t1.fullname
+             , t1.appellation, t1.email, t1.mphone, t1.job, t1.birth
+             , t1.createBy, t1.createTime, t1.editBy, t1.editTime, t1.description
+             , t1.contactSummary, t1.nextContactTime, t1.address
+        FROM tbl_contacts t1
+                 JOIN tbl_user t2 ON t1.owner = t2.id
+                 JOIN tbl_customer t3 ON t1.customerId = t3.id
+        order by createTime desc
+    </select>
+
+    <select id="getContactsById" resultType="org.example.crm.workbench.domain.Contacts">
+        SELECT t1.id, t2.name AS owner, t1.source, t3.name AS customerId, t1.fullname
+             , t1.appellation, t1.email, t1.mphone, t1.job, t1.birth
+             , t1.createBy, t1.createTime, t1.editBy, t1.editTime, t1.description
+             , t1.contactSummary, t1.nextContactTime, t1.address
+        FROM tbl_contacts t1
+                 JOIN tbl_user t2 ON t1.owner = t2.id
+                 JOIN tbl_customer t3 ON t1.customerId = t3.id
+        where t1.id = #{id}
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

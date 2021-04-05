@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.crm.workbench.dao.CustomerDao">
+    <select id="getCustomerByName" resultType="org.example.crm.workbench.domain.Customer">
+        SELECT id, owner, name, website, phone
+             , createBy, createTime, editBy, editTime, contactSummary
+             , nextContactTime, description, address
+        FROM tbl_customer
+        WHERE name = #{company}
+    </select>
+
+    <insert id="save">
+        insert into tbl_customer (
+            id,
+            owner,
+            name,
+            website,
+            phone,
+            createBy,
+            createTime,
+            contactSummary,
+            nextContactTime,
+            description,
+            address
+        )values(
+           #{id},
+           #{owner},
+           #{name},
+           #{website},
+           #{phone},
+           #{createBy},
+           #{createTime},
+           #{contactSummary},
+           #{nextContactTime},
+           #{description},
+           #{address}
+        )
+    </insert>
+
+    <select id="getNameList" resultType="String">
+        SELECT name
+        FROM tbl_customer
+        <where>
+            <if test="name != null and name != '' ">
+                name LIKE '%' #{name} '%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getCustomerByCondition" resultType="org.example.crm.workbench.domain.Customer">
+        SELECT t1.id, t2.name AS owner, t1.name, t1.website, t1.phone
+             , t1.createBy, t1.createTime, t1.editBy, t1.editTime, t1.contactSummary
+             , t1.nextContactTime, t1.description, t1.address
+        FROM tbl_customer t1
+                 JOIN tbl_user t2 ON t1.owner = t2.id
+        ORDER BY t1.createTime DESC
+    </select>
+
+    <select id="getCustomerById" resultType="org.example.crm.workbench.domain.Customer">
+        SELECT t1.id, t2.name AS owner, t1.name, t1.website, t1.phone
+             , t1.createBy, t1.createTime, t1.editBy, t1.editTime, t1.contactSummary
+             , t1.nextContactTime, t1.description, t1.address
+        FROM tbl_customer t1
+                 JOIN tbl_user t2 ON t1.owner = t2.id
+        where t1.id = #{id}
+    </select>
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

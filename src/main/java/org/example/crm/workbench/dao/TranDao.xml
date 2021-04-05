@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.crm.workbench.dao.TranDao">
+
+    <insert id="save">
+        INSERT INTO tbl_tran (id, owner, money, name, expectedDate
+                             , customerId, stage, type, source, activityId
+                             , contactsId, createBy, createTime, description, contactSummary
+                             , nextContactTime)
+        VALUES (#{id}, #{owner}, #{money}, #{name}, #{expectedDate}
+               , #{customerId}, #{stage}, #{type}, #{source}, #{activityId}
+               , #{contactsId}, #{createBy}, #{createTime}, #{description}, #{contactSummary}
+               , #{nextContactTime})
+    </insert>
+
+    <select id="getTranByCondition" resultType="org.example.crm.workbench.domain.Tran">
+        select
+            t1.id,
+            t2.name as owner,
+            t1.money,
+            t1.name,
+            t1.expectedDate,
+            t4.name as customerId,
+            t1.stage,
+            t1.type,
+            t1.source,
+            t1.activityId,
+            t3.fullname as contactsId,
+            t1.createBy,
+            t1.createTime,
+            t1.editBy,
+            t1.editTime,
+            t1.description,
+            t1.contactSummary,
+            t1.nextContactTime
+
+        from tbl_tran t1
+        join tbl_user t2 on t1.owner = t2.id
+        join tbl_contacts t3 on t1.contactsId = t3.id
+        join tbl_customer t4 on t1.customerId = t4.id
+        order by t1.createTime desc
+    </select>
+
+    <select id="detail" resultType="org.example.crm.workbench.domain.Tran">
+        SELECT t1.id, t2.name AS owner, t1.money, t1.name, t1.expectedDate
+             , t4.name AS customerId, t1.stage, t1.type, t1.source, t5.name As activityId
+             , t3.fullname AS contactsId, t1.createBy, t1.createTime, t1.editBy, t1.editTime
+             , t1.description, t1.contactSummary, t1.nextContactTime
+        FROM tbl_tran t1
+                 JOIN tbl_user t2 ON t1.owner = t2.id
+                 LEFT JOIN tbl_contacts t3 ON t1.contactsId = t3.id
+                 JOIN tbl_customer t4 ON t1.customerId = t4.id
+                 LEFT JOIN tbl_activity t5 ON t1.activityId = t5.id
+        WHERE t1.id = #{id}
+    </select>
+
+    <update id="changeStage">
+        update tbl_tran set stage=#{stage},editBy=#{editBy},editTime=#{editTime}
+        where id = #{id}
+    </update>
+
+    <select id="getTotal" resultType="int">
+        select count(*) from tbl_tran
+    </select>
+
+    <select id="getCharts" resultType="map">
+        select count(*) as value,stage as name
+        /*from tbl_tran 下面语句只是为了测试数据，正确语句为注释这条*/
+        from tbl_tran_history
+        group by stage
+    </select>
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

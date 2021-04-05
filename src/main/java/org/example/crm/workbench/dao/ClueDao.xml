@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.crm.workbench.dao.ClueDao">
+
+    <insert id="save">
+        insert into tbl_clue(
+
+            id,
+            fullname,
+            appellation,
+            owner,
+            company,
+            job,
+            email,
+            phone,
+            website,
+            mphone,
+            state,
+            source,
+            createBy,
+            createTime,
+            description,
+            contactSummary,
+            nextContactTime,
+            address
+
+        )value(
+
+            #{id},
+            #{fullname},
+            #{appellation},
+            #{owner},
+            #{company},
+            #{job},
+            #{email},
+            #{phone},
+            #{website},
+            #{mphone},
+            #{state},
+            #{source},
+            #{createBy},
+            #{createTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime},
+            #{address}
+        )
+    </insert>
+
+    <select id="detail" resultType="Clue">
+        select
+
+        t1.id,
+        t1.fullname,
+        t1.appellation,
+		t2.name as owner,
+        t1.company,
+        t1.job,
+        t1.email,
+        t1.phone,
+        t1.website,
+        t1.mphone,
+        t1.state,
+        t1.source,
+        t1.createBy,
+        t1.createTime,
+        t1.editBy,
+        t1.editTime,
+        t1.description,
+        t1.contactSummary,
+        t1.nextContactTime,
+        t1.address
+
+
+        from tbl_clue t1
+		join tbl_user t2
+		on t1.owner = t2.id
+
+        where t1.id = #{id}
+    </select>
+
+    <select id="getActivityByCondition" resultType="org.example.crm.workbench.domain.Clue">
+        select
+        t1.id,
+        t1.fullname,
+        t1.company,
+        t1.phone,
+        t1.mphone,
+        t1.source,
+        t2.name as owner,
+        t1.state
+
+        from tbl_clue t1
+        join tbl_user t2
+        on t1.owner = t2.id
+
+        <where>
+            <if test="fullname != null and fullname != '' ">
+                t1.fullname like '%' #{fullname} '%'
+            </if>
+
+        </where>
+
+        order by t1.createTime desc
+    </select>
+
+    <select id="getById" resultType="Clue">
+        SELECT t1.id, t1.fullname, t1.appellation, t1.owner, t1.company
+             , t1.job, t1.email, t1.phone, t1.website, t1.mphone
+             , t1.state, t1.source, t1.createBy, t1.createTime, t1.editBy
+             , t1.editTime, t1.description, t1.contactSummary, t1.nextContactTime, t1.address
+        FROM tbl_clue t1
+        WHERE t1.id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from tbl_clue where id = #{id}
+    </delete>
+	
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

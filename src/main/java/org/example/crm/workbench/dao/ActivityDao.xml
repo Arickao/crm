@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.crm.workbench.dao.ActivityDao">
+
+    <insert id="save" parameterType="org.example.crm.workbench.domain.Activity">
+        insert into tbl_activity (
+            id,
+            owner,
+            name,
+            startDate,
+            endDate,
+            cost,
+            description,
+            createTime,
+            createBy
+        )
+        values(
+            #{id},
+            #{owner},
+            #{name},
+            #{startDate},
+            #{endDate},
+            #{cost},
+            #{description},
+            #{createTime},
+            #{createBy}
+        )
+    </insert>
+
+    <select id="getActivityByCondition" resultType="org.example.crm.workbench.domain.Activity">
+        select
+        t1.id,
+        t1.name,
+        t2.name as owner,
+        t1.startDate,
+        t1.endDate
+
+        from tbl_activity t1
+        join tbl_user t2
+        on t1.owner = t2.id
+
+        <where>
+            <if test="name != null and name != '' ">
+                t1.name like '%' #{name} '%'
+            </if>
+
+            <if test="owner != null and owner != '' ">
+                and t2.name like '%' #{owner} '%'
+            </if>
+
+            <if test="startDate != null and startDate != '' ">
+                and t1.startDate &gt; #{startDate}
+            </if>
+
+            <if test="endDate != null and endDate != '' ">
+                and t1.endDate &lt; #{endDate}
+            </if>
+
+        </where>
+
+        order by t1.createTime desc
+
+    </select>
+
+    <select id="getById" resultType="org.example.crm.workbench.domain.Activity">
+        select
+        id,
+        owner,
+        name,
+        startDate,
+        endDate,
+        cost,
+        description
+        from tbl_activity where id=#{id}
+    </select>
+
+    <update id="update">
+        update tbl_activity set
+            owner=#{owner},
+            name=#{name},
+            startDate=#{startDate},
+            endDate=#{endDate},
+            cost=#{cost},
+            description=#{description},
+            editTime=#{editTime},
+            editBy=#{editBy}
+        where id= #{id}
+    </update>
+
+    <delete id="delete">
+        delete
+        from tbl_activity
+        where id in
+        <foreach collection="array" item="aid" open="(" close=")" separator=",">
+            #{aid}
+        </foreach>
+    </delete>
+
+    <select id="detail" resultType="org.example.crm.workbench.domain.Activity">
+        select
+
+        t1.id,
+        t2.name as owner,
+        t1.name,
+        t1.startDate,
+        t1.endDate,
+        t1.cost,
+        t1.description,
+        t1.createTime,
+        t1.createBy,
+        t1.editTime,
+        t1.editBy
+
+        from tbl_activity t1
+        join tbl_user t2
+        on t1.owner = t2.id
+        where t1.id = #{id}
+    </select>
+
+    <select id="getActivityListByClueId" resultType="org.example.crm.workbench.domain.Activity">
+        SELECT t2.id, t1.name,t3.name AS owner, t1.startDate, t1.endDate
+        FROM tbl_activity t1
+                 JOIN tbl_clue_activity_relation t2 ON t2.activityId = t1.id
+                 JOIN tbl_user t3 ON t3.id = t1.owner
+        WHERE t2.clueId = #{clueId}
+
+    </select>
+
+    <select id="getActivityListByNameAndNotByClueId" resultType="org.example.crm.workbench.domain.Activity">
+        SELECT t1.id, t1.name, t1.startDate, t1.endDate, t2.name AS owner
+        FROM tbl_activity t1
+                 JOIN tbl_user t2 ON t1.owner = t2.id
+
+        <where>
+
+            <if test="clueId != null and clueId != '' ">
+                t1.id not in (
+                select activityId from tbl_clue_activity_relation where clueId = #{clueId})
+            </if>
+
+            <if test="aname != null and aname != '' ">
+                and t1.name like '%' #{aname} '%'
+            </if>
+
+        </where>
+
+    </select>
+
+
+</mapper>
